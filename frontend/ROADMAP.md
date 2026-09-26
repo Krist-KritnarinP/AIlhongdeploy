@@ -1,30 +1,36 @@
 # ROADMAP — จาก MVP สู่โปรดักชันที่เก็บเงินได้จริง
 
 > สถานะปัจจุบัน (2026-09-25): MVP ใช้งานได้ (CRUD ทริป/วัน/กิจกรรม, AI พยากรณ์อากาศ, แชร์ลิงก์, 4 ภาษา)
-> แต่ **ยังไม่พร้อม** รับ user จริง/เก็บเงิน — ขาด: ระบบจ่ายเงิน, โควต้า, กฎหมาย PDPA, monitoring, AI สร้างทริป (ปุ่มยัง disabled)
+> แต่ **ยังไม่พร้อม** รับ user จริง/เก็บเงิน — ขาด: ระบบจ่ายเงิน, เอกสาร/กระบวนการกฎหมายที่ตรวจแล้ว, monitoring ที่เปิดใช้งานจริง, AI สร้างทริป (ปุ่มยัง disabled)
 > ไฟล์นี้คือ task list แบ่ง phase + โมเดลสเกล + แพ็กเกจขาย
 
 ## Phase 0 — Production Readiness (2–3 สัปดาห์) ⛔ ทำก่อนรับ user จริง
 
+สถานะอัปเดต 2026-09-26: งานโค้ด Phase 0 ทำต่อแล้ว แต่ **Phase 0 ยังไม่ปิด** เพราะรายการเปิดใช้งานจริงด้านล่างยังค้างตามที่ผู้ใช้ขอ ดู [Operations checklist](../docs/PHASE0_OPERATIONS.md)
+
 **Security & Reliability**
-- [ ] เปิด Supabase backups (Point-in-Time) + ทดสอบ restore 1 ครั้ง
-- [ ] แยก `DATABASE_URL` (pooler) / `DIRECT_URL` (direct) ให้ถูก role — วันนี้ใช้ user `postgres` เจ้าของ DB ตรง ๆ (**เสี่ยง**: คีย์หลุด = โดนยึด DB) → สร้าง role สิทธิ์จำกัดสำหรับแอป
-- [ ] หมุน `JWT_SECRET` ให้ยาว ≥32 ตัวอักษร + เพิ่ม refresh token (วันนี้ access token 1 วัน ไม่มี refresh)
-- [ ] ล็อกเวอร์ชัน `GEMINI_MODEL` + ทำ model fallback (เช่น 3.8-flash → 3.5-flash-lite) กันโมเดลถูกปลดอีก
-- [ ] แคชผลพยากรณ์อากาศรายทริป (เช่น 6 ชม.) — วันนี้กดทุกครั้ง = เสียโควต้า/เงินทุกครั้ง
-- [ ] Error tracking (Sentry self-host/GlitchTip) + uptime monitor (Uptime Kuma/Better Stack)
-- [ ] สำรอง rate-limit ราย user ที่เส้น AI (วันนี้ limit รวมต่อ IP — user คนนึงเผาโควต้าทั้งระบบได้)
+- [ ] Supabase backup/PITR + restore drill บน project แยก — ยังไม่ทำ ต้องมีสิทธิ์และแผนบริการจริง
+- [x] แยก runtime DB role และหมุน JWT secret (งานก่อนหน้า); รอบนี้เตรียม migration สิทธิ์ refresh_sessions เพิ่ม
+- [x] Access token 15 นาที + rotating HttpOnly refresh token 7 วัน, revoke เมื่อเปลี่ยนรหัส/logout และตรวจ token reuse
+- [x] Explicit model config + optional fallback แบบจำกัดครั้งและคิด quota ทุก attempt
+- [ ] ตรวจรุ่น Gemini primary/fallback ที่ใช้ได้จริงในบัญชี — ยังไม่ทำ ไม่เรียก AI เสียเงินในการทดสอบ
+- [x] Cache AI 6 ชั่วโมงและ durable quota ต่อ user/global (งานก่อนหน้า)
+- [x] เตรียม Sentry integration ที่กรองข้อมูล + liveness/readiness endpoints
+- [ ] เชื่อม Sentry/uptime monitor จริงและทดสอบ alert — ยังไม่มีบริการปลายทาง
 
 **Legal (ไทย)**
-- [ ] Privacy Policy + Terms of Service (ภาษาไทย) — บังคับตาม PDPA
-- [ ] Cookie consent banner
-- [ ] ช่องทางลบข้อมูล/ส่งออกข้อมูล (PDPA right to erasure/portability) — มี `DELETE user` cascade อยู่แล้ว ต่อ UI ให้ user กดเองได้
-- [ ] จดทะเบียนพาณิชย์อิเล็กทรอนิกส์ (ถ้ารับเงิน) + ออกใบกำกับภาษีได้
+- [ ] Privacy Policy + Terms ภาษาไทย — พักไว้จนมีชื่อผู้ให้บริการและช่องทางติดต่อจริง
+- [ ] ตรวจ cookies/storage/third-party inventory และทำ notice/consent ที่เหมาะสม — ยังไม่ทำ UI ยินยอมสมมติ
+- [x] Self-service export JSON / delete account พร้อมยืนยันรหัสผ่าน, ownership และ cascade ในโค้ด
+- [ ] นโยบาย retention/backups และขั้นตอนสิทธิข้อมูลนอกฐานข้อมูล live — ยังไม่กำหนด
+- [ ] ตรวจทะเบียนพาณิชย์/ภาษีเมื่อรับเงิน — ยังไม่ทำ
 
 **Ops**
-- [ ] CI: `npm run build` + `prisma validate` ทุก push (GitHub Actions)
-- [ ] แยก env `staging` / `production` (วันนี้มีชุดเดียว)
-- [ ] ตั้ง budget alert ฝั่ง Google AI (กันบิลพุ่ง)
+- [x] เพิ่ม GitHub Actions: unit tests, frontend build, Prisma validate/generate, PostgreSQL integration และ migration idempotence
+- [ ] ยืนยัน CI run บน GitHub หลัง push — workflow ยังไม่ได้รันบน remote ในรอบนี้
+- [x] เตรียม environment matrix, migration/rollback/maintenance และ release checklist
+- [ ] สร้าง staging/production แยกจริงและทดสอบ domains/cookies/headers — ยังไม่มีโดเมนหรือ hosting
+- [ ] ตั้ง Google AI budget alert และตรวจผู้รับแจ้งเตือน — ยังไม่ทำในบัญชีจริง
 
 ## Phase 1 — Core Value & Activation (3–4 สัปดาห์)
 

@@ -40,4 +40,11 @@ const useUserStore = create( persist((set,get) => ({
  partialize: (state) => ({ user: state.user, token: state.token }),
 }))
 
+window.addEventListener('auth:renewed', event => {
+  useUserStore.setState({ token: event.detail.token, user: event.detail.user });
+});
+window.addEventListener('storage', event => {
+  if (event.key === 'authState') useUserStore.persist.rehydrate();
+});
+
 export default useUserStore

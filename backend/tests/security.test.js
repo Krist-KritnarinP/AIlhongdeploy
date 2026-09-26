@@ -15,7 +15,7 @@ import { updateActivityService } from '../src/services/activities.service.js';
 import { predictTripWeather } from '../src/controllers/weather.controller.js';
 // Unit tests use a disposable signing key and mocked database methods.
 process.env.JWT_SECRET = randomBytes(48).toString("hex");
-const response = () => ({ statusCode: 200, status(n) { this.statusCode = n; return this; }, json(v) { this.body = v; return this; }, sendStatus(n) { this.statusCode = n; } });
+const response = () => ({ statusCode: 200, clearCookie() {}, status(n) { this.statusCode = n; return this; }, json(v) { this.body = v; return this; }, sendStatus(n) { this.statusCode = n; } });
 const user = { id: 41, email: 'test@example.invalid', username: 'Test', tokenVersion: 0, password: await bcrypt.hash('existing password', 4) };
 
 test('reject weak passwords, oversized UTF-8 and malformed activity/date inputs', () => {

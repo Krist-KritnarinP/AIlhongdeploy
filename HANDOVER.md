@@ -1,5 +1,31 @@
 # Handover — 2026-09-26
 
+## Phase 0 — implementation update (2026-09-26)
+
+ทำงานใน worktree/branch `codex/phase0-production` เพื่อไม่ทับงาน agent อื่น ผู้ใช้ยืนยันภายหลังว่ายังไม่มี agent อื่นรับส่วนงาน รายละเอียดการเปิดใช้งานอยู่ใน [docs/PHASE0_OPERATIONS.md](docs/PHASE0_OPERATIONS.md) และสถานะรายข้ออยู่ใน [frontend/ROADMAP.md](frontend/ROADMAP.md)
+
+งานโค้ดที่เพิ่ม:
+- GitHub Actions: frontend/backend tests, build, Prisma validate/generate, PostgreSQL HTTP integration และรัน migration ซ้ำ
+- Access JWT 15 นาที + refresh token แบบ HttpOnly อายุ 7 วัน, เก็บ hash ใน DB, หมุน token/ตรวจ reuse, Origin validation และ frontend single-flight/Web Locks
+- เปลี่ยนรหัสผ่าน/logout เพิกถอน refresh ด้วย tokenVersion; หน้าโปรไฟล์เพิ่ม export JSON และยืนยันรหัสผ่านก่อนลบบัญชีพร้อม cascade
+- Gemini ใช้ model config ชัดเจน มี optional fallback เฉพาะ 404/503 ไม่เกินสอง provider attempts โดยคิด quota ทุกครั้ง; เพิ่ม AI_ENABLED สำหรับหยุดใช้งาน
+- Liveness/readiness, optional Sentry แบบ allowlist ไม่ส่งข้อมูลส่วนตัว, config validation และงาน cleanup refresh sessions
+
+ผลตรวจรอบนี้:
+- Unit tests **19 ผ่าน** (frontend 6 + backend 13), production build และ Prisma validate/generate ผ่าน
+- HTTP security integration เดิมและ Phase 0 integration ผ่านบน PostgreSQL 17 ชั่วคราว ไม่เรียก AI provider
+- ทดสอบอัปเกรดจาก Prisma schema ของ commit ebd9f60 และ migration ซ้ำผ่าน; ทดสอบ refresh/export/delete/password/logout ด้วย runtime role ที่ไม่ใช่เจ้าของ DB และเปิด RLS ผ่าน
+- Chromium mobile smoke ผ่าน: 401 ต่ออายุ token อัตโนมัติหนึ่งครั้ง, ดาวน์โหลด JSON, ต้องกดยืนยันก่อนลบบัญชี, ไม่มี horizontal overflow/page errors (API จำลอง; HTTP/DB จริงตรวจแยก)
+- Frontend lint exit 0 มี warnings เดิม 8 รายการ ไม่ใช่ lint-clean ทั้งหมด
+- npm install รายงาน dependency audit 0 vulnerabilities หลังเพิ่ม Sentry; ไม่ใช่การรับรอง penetration test
+
+**ก่อน deploy:** ต้องรัน `npm run migrate:phase0 --prefix backend` ด้วย migration credential หลังยืนยัน backup แล้ว ตั้ง APP_ENV และ REFRESH_COOKIE_SAME_SITE ให้ถูกกับ domain และตั้ง scheduled cleanup. รอบนี้ **ไม่ได้เปลี่ยนฐานข้อมูล Supabase จริงและไม่ได้ deploy/push**
+
+**งานค้างตามคำขอผู้ใช้:** ชื่อ/อีเมลผู้ให้บริการ, Privacy/Terms/consent ที่ตรวจแล้ว, staging/production domains/resources, Sentry/uptime ปลายทางจริง, Supabase backup/PITR + restore drill, Google budget alerts และตรวจ availability ของ Gemini models จริง จึงยังไม่ติ๊ก Phase 0 ว่าพร้อมเปิด public ทั้งหมด
+
+ข้อจำกัด: access token ยังอยู่ใน localStorage; refresh แบบ cross-site อาจถูก browser บล็อก; retry refresh token ที่ใช้ไปแล้วจะเพิกถอนทุก session ของบัญชี; export/delete ครอบคลุมฐานข้อมูล live ไม่ได้ลบสำเนา backups/provider logs โดยอัตโนมัติ
+
+
 ## อัปเดตเอกสาร: แผน Admin — 2026-09-26
 
 - เพิ่ม [ADMIN_PLAN.md](ADMIN_PLAN.md) บันทึกความจำเป็น หน้าที่ ขอบเขตสิทธิ์ และแผนพัฒนา Admin รุ่นแรก

@@ -6,7 +6,7 @@
 
 | งาน | สถานะล่าสุด |
 |---|---|
-| ยืนยันรหัสเดิม / เพิกถอน token | ทำแล้ว: tokenVersion, JWT 1 ชั่วโมง, logout ทุก session |
+| ยืนยันรหัสเดิม / เพิกถอน token | ทำแล้ว: tokenVersion, JWT 15 นาที + rotating HttpOnly refresh สูงสุด 7 วัน, logout ทุก session |
 | รหัสผ่าน / secret | ทำแล้ว: 15 ตัว, สูงสุด 72 bytes, bcrypt 12, production config validation และเปลี่ยน local secret |
 | error / validation | ทำแล้ว: response/log กรองข้อมูลภายใน และ schema ของ CRUD/IDs |
 | AI / resource limits | ทำแล้ว: ownership ก่อน provider, durable quota, cache/timeout/token limit, transactional resource caps และ trip pagination |
@@ -15,6 +15,8 @@
 | frontend headers | เพิ่ม config Vercel/Netlify-style แล้ว ยังต้องตรวจ header บน host จริง |
 | localStorage / shared IP limiter / breach check | ยังไม่ได้เปลี่ยน; ดูข้อจำกัดใน handover |
 | หลักฐาน | unit tests backend 7/frontend 4 และ two-user API integration ผ่าน; ไม่ใช่ full penetration test |
+
+Phase 0 follow-up: เพิ่ม Origin check สำหรับ refresh, hash/reuse detection, password-confirmed data export/delete และ optional monitoring แบบกรองข้อมูล. ทดสอบ HTTP กับ PostgreSQL ชั่วคราวและ limited runtime role แล้ว แต่ยังไม่ได้ apply refresh-session migration บน Supabase จริง ดู [Phase 0 operations](../docs/PHASE0_OPERATIONS.md)
 
 รายละเอียดวิธี deploy/ข้อจำกัด: [HANDOVER.md หัวข้อ 5.8](HANDOVER.md#58-รอบ-10--performance-และ-security-2026-09-26)
 

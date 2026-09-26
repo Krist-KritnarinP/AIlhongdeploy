@@ -1,3 +1,4 @@
+import { isTrustedOrigin, issueRefreshSession, setRefreshCookie } from "../security/refresh-session.js";
 import bcrypt from "bcrypt";
 import { prisma } from "../lib/prisma.js";
 import { createUser, findUserByEmail } from "../services/user.service.js";
@@ -52,7 +53,12 @@ export async function login(req, res, next) {
     }
 
     // 5. สร้าง Token และส่ง Response กลับ
+    if (req.headers.origin && !isTrustedOrigin(req)) return next(createError(403, "Untrusted origin"));
     const token = await createToken(user);
+    if (isTrustedOrigin(req)) {
+      const session = await issueRefreshSession(user);
+      setRefreshCookie(res, session.token, session.expiresAt);
+    }
 
     return res.status(200).json({
       message: "Login successfully",

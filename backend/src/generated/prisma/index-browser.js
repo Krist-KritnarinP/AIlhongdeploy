@@ -186,6 +186,14 @@ exports.Prisma.AiUsageScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.RefreshSessionScalarFieldEnum = {
+  tokenHash: 'tokenHash',
+  userId: 'userId',
+  tokenVersion: 'tokenVersion',
+  expiresAt: 'expiresAt',
+  usedAt: 'usedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -219,7 +227,8 @@ exports.Prisma.ModelName = {
   Day: 'Day',
   Activity: 'Activity',
   AiMessage: 'AiMessage',
-  AiUsage: 'AiUsage'
+  AiUsage: 'AiUsage',
+  RefreshSession: 'RefreshSession'
 };
 
 /**

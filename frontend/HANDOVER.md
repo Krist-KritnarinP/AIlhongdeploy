@@ -305,3 +305,12 @@ Auth: `Authorization: Bearer <token>` (จาก `localStorage.authState.state.t
 - Dependency audits at time of work: backend full audit and frontend production audit reported zero known vulnerabilities. This is not a penetration-test guarantee.
 - Combined publication folder: `../AIlhongdeploy`, with `frontend/` and `backend/`. Original repositories and their histories remain intact. The new repo is a snapshot, not merged Git histories.
 - Deployment has NOT been performed. Follow the combined root README for environment variables, database initialization and hosting settings. Existing local users must log in again following the JWT secret rotation.
+
+
+## Phase 0 follow-up — 2026-09-26
+
+สถานะใหม่แทนข้อความ session อายุ 1 ชั่วโมงในประวัติด้านบน: access token 15 นาที + rotating HttpOnly refresh 7 วัน พร้อม migration `refresh_sessions`; เพิ่ม export/delete account UI, model fallback, health checks, Sentry integration และ CI
+
+ผลตรวจ: unit tests 19 ผ่าน, PostgreSQL 17 integration (รวม limited runtime role/RLS) ผ่าน, migration จาก schema รุ่นก่อนและรันซ้ำผ่าน, frontend build และ Chromium mobile smoke ผ่าน. ไม่มีการเรียก AI เสียเงินหรือแก้ Supabase จริงในรอบนี้
+
+ดูรายละเอียดและรายการค้างที่ผู้ใช้ขอพักไว้ใน [root HANDOVER](../HANDOVER.md), [Phase 0 operations](../docs/PHASE0_OPERATIONS.md) และ [ROADMAP](ROADMAP.md). ต้อง apply `migrate:phase0` ก่อน deploy API ใหม่. งานเอกสารกฎหมาย/โดเมน/backup restore/monitoring และ budget บริการจริงยังไม่เสร็จ
