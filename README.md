@@ -28,10 +28,10 @@ npm run dev:backend
 ```
 
 ```sh
-npm run dev:frontend
+npm run dev
 ```
 
-Frontend: http://localhost:5173 — API: http://localhost:8899/api
+เปิด frontend จาก repo root ได้ด้วย `npm run dev` (หรือ `npm run dev:frontend`); Frontend: http://localhost:5173 — API: http://localhost:8899/api
 
 ## Database setup
 

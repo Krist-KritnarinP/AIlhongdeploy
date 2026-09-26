@@ -113,14 +113,16 @@ function Login() {
                       <p className="text-sm text-error mt-1">
                         {errors.password?.message}
                       </p>
-                      <Link className="link link-primary mt-2 inline-block text-sm" to="/forgot-password">
-                        {t("auth.forgotPassword")}
-                      </Link>
                     </div>
 
                     <button className="btn btn-primary text-lg w-full">
                       {t("auth.login")}
                     </button>
+                    <div className="flex justify-end -mt-3">
+                      <Link className="btn btn-link btn-sm min-h-0 h-auto px-0 text-primary" to="/forgot-password">
+                        {t("auth.forgotPassword")}
+                      </Link>
+                    </div>
                     <div className="divider my-0"></div>
                     <GoogleSignInButton onCredential={handleGoogleCredential} onUnavailable={handleGoogleUnavailable} locale={lang} label={t("auth.googleBtn")} />
                     <div className="divider my-0">{t("auth.or")}</div>

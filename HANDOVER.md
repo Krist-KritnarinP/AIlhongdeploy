@@ -21,6 +21,12 @@
 - ยังไม่สามารถเปิดใช้ Google login จริงโดยไม่มี Google OAuth Web Client ID และ authorized origin ของเว็บ
 - เพิ่ม checklist สำหรับผู้ดูแลใน [docs/AUTH_SETUP.md](docs/AUTH_SETUP.md); frontend build และ tests ผ่านหลังปรับปุ่ม
 
+## Local dev/login visibility follow-up (2026-09-26)
+
+- เพิ่ม root script `npm run dev` ให้เปิด frontend ของ monorepo โดยตรง ตามคำสั่งที่ผู้ใช้ใช้; คง `npm run dev:frontend` ไว้เหมือนเดิม
+- ย้ายลิงก์ “Forgot password?” ไปไว้ชัดเจนใต้ปุ่ม Login ก่อน divider/Google button
+- ต้อง logout ก่อนทดสอบหน้า login; session ที่ค้างจะ redirect `/` และ `/forgot-password` ไป dashboard ตาม GuestRoute
+
 ## Phase 0 — implementation update (2026-09-26)
 
 ทำงานใน worktree/branch `codex/phase0-production` เพื่อไม่ทับงาน agent อื่น ผู้ใช้ยืนยันภายหลังว่ายังไม่มี agent อื่นรับส่วนงาน รายละเอียดการเปิดใช้งานอยู่ใน [docs/PHASE0_OPERATIONS.md](docs/PHASE0_OPERATIONS.md) และสถานะรายข้ออยู่ใน [frontend/ROADMAP.md](frontend/ROADMAP.md)
