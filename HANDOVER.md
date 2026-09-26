@@ -58,6 +58,6 @@
 
 - Added root `render.yaml`: free Singapore API/static services, API readiness, deploy only after GitHub checks pass, API reverse proxy under frontend `/api` (same-origin refresh cookies), SPA fallback, CSP/security headers, random JWT secret, Gemini disabled by default.
 - Added [docs/DEPLOY_TEST_LINK.md](docs/DEPLOY_TEST_LINK.md) with secure setup order and Render Blueprint link; proposed frontend URL `https://ailhongdeploy-kritnarinp-test-web.onrender.com` is **not live/verified** until Blueprint creation, staging runtime DB config, migrations and healthy deployments complete.
-- Push `main` สำเร็จแล้ว; ตรวจ SHA ของ GitHub remote ตรงกับ commit `2da04bde9619e9815a2e3052e4c112ffa6502ca4`. `render.yaml` จึงพร้อมให้ Blueprint อ่าน แต่ GitHub Actions และ Render deploy ยังต้องติดตามผลจริง
+- Push `main` สำเร็จแล้ว; ตรวจ SHA ของ remote ตรงกับ commit `f3fc8b548ba0d83359b52f99d28b8cb7c34baf11`. GitHub Actions run #2 ของ SHA นี้สำเร็จ (`https://github.com/Krist-KritnarinP/AIlhongdeploy/actions/runs/36225372453`). หลัง commit handover นี้จะมี workflow ใหม่สำหรับเอกสาร ให้ตรวจ run ล่าสุดก่อน Render deploy. `render.yaml` พร้อมให้ Blueprint อ่าน
 - No database or Gemini secrets were found in Render/GitHub; staging requires a separate limited-role database URL entered directly in Render Dashboard, not sent in chat. Gemini begins disabled.
 - Existing production/Supabase database was not touched. Render services not created; waiting for GitHub push/Blueprint sync and user-owned Render environment inputs is still required.
