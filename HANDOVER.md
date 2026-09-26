@@ -61,3 +61,9 @@
 - Push `main` สำเร็จแล้ว; ตรวจ SHA ของ remote ตรงกับ commit `f3fc8b548ba0d83359b52f99d28b8cb7c34baf11`. GitHub Actions run #2 ของ SHA นี้สำเร็จ (`https://github.com/Krist-KritnarinP/AIlhongdeploy/actions/runs/36225372453`). หลัง commit handover นี้จะมี workflow ใหม่สำหรับเอกสาร ให้ตรวจ run ล่าสุดก่อน Render deploy. `render.yaml` พร้อมให้ Blueprint อ่าน
 - No database or Gemini secrets were found in Render/GitHub; staging requires a separate limited-role database URL entered directly in Render Dashboard, not sent in chat. Gemini begins disabled.
 - Existing production/Supabase database was not touched. Render services not created; waiting for GitHub push/Blueprint sync and user-owned Render environment inputs is still required.
+
+## Render Not Found clarification and deploy link (2026-09-26)
+
+- Confirmed proposed app URL currently responds HTTP 404 because the Render services do not exist yet; it is not a live test site. Added the official Deploy to Render button to README to start the Blueprint in the user's Render account.
+- Changed both Blueprint services to `autoDeployTrigger: off` following Render's Deploy Button guidance, so future pushes do not silently deploy into every tester's Render instance. Each owner redeploys from their own Render Dashboard.
+- No Render service or database was created/modified. Still requires user's Render authorization and a separate migrated staging DB runtime URL; never use the production/Supabase credential.

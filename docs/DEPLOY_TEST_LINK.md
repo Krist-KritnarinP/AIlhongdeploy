@@ -6,7 +6,7 @@ Blueprint นี้สร้าง **staging** แยกเป็น static fron
 
 API ใช้ route `/api/*` ที่ frontend proxy ไป backend ทำให้ browser ใช้ same-origin และ refresh cookie เป็น `SameSite=Lax` ได้ ไม่ต้องส่ง database/Gemini secret ไปฝั่ง browser
 
-> นี่คือลิงก์ตั้ง Blueprint ไม่ใช่ลิงก์เว็บที่ deploy เสร็จแล้ว ต้องเชื่อม GitHub/Render, ตั้ง staging DB และรอ deployment สำเร็จก่อนแชร์ URL ให้ผู้ทดสอบ หาก Render แจ้งว่าชื่อ service ซ้ำและเติม suffix ให้แก้ API domain ใน `FRONTEND_URL` และ frontend API rewrite ให้ตรงชื่อจริง แล้ว sync Blueprint ใหม่
+> URL ด้านบนเป็น URL ของเว็บหลัง deploy สำเร็จ ยังไม่ใช่เว็บที่เปิดใช้ได้ตอนนี้ หากเปิดก่อนสร้างบริการบน Render จะขึ้น Not Found
 
 ## สิ่งที่ต้องมี
 
@@ -20,7 +20,7 @@ API ใช้ route `/api/*` ที่ frontend proxy ไป backend ทำใ�
 ## ทำครั้งแรก
 
 1. Push branch `main` ไป GitHub และตรวจว่า Actions workflow `Phase 0 checks` ผ่านก่อน Render deploy
-2. เปิด [Deploy Render Blueprint](https://dashboard.render.com/blueprint/new?repo=https://github.com/Krist-KritnarinP/AIlhongdeploy) และเลือก workspace ของคุณ ตรวจว่า service ทั้งสองเป็นแผน Free ก่อนกด apply
+2. กดปุ่ม [Deploy to Render](https://render.com/deploy?repo=https://github.com/Krist-KritnarinP/AIlhongdeploy) ใน README, เชื่อม GitHub หากระบบขอ และเลือก workspace ของคุณ ตรวจ service และแผนก่อนอนุมัติ Blueprint
 3. กรอกเฉพาะ **runtime URL ของ staging role** ในช่อง `DATABASE_URL` ของ API service เป็น secret ใน Render Dashboard ไม่ต้องส่งค่าให้ Codex และห้ามวางใน GitHub variables, Blueprint หรือ browser `VITE_*`
 4. ตรวจ Render environment ว่าค่าที่ระบบสร้าง/ตั้งไว้มี `JWT_SECRET` ที่ Render generate ให้, `APP_ENV=staging`, `FRONTEND_URL` ตรงกับ web service จริง, `TRUST_PROXY_HOPS=1`, `AI_ENABLED=false` และ `REFRESH_COOKIE_SAME_SITE=lax`
 5. ถ้าใช้ staging DB ใหม่ ให้สร้าง schema และ security objects ด้วย migration credential **ก่อน** เปิด API; อย่ารัน migration ด้วย runtime role. หลัง migration ตรวจ role ต่อ `refresh_sessions` ได้โดยไม่มี schema CREATE
@@ -34,4 +34,4 @@ API ใช้ route `/api/*` ที่ frontend proxy ไป backend ทำใ�
 - โค้ด/URL ของบริการยังไม่พิสูจน์จนกว่าจะผ่าน Blueprint sync, environment setup, migration และ deployment status; ติดตาม build/deploy ใน Render Dashboard
 - ก่อนเปิด AI ต้องเลือก model IDs ที่บัญชี Gemini ใช้งานได้จริง ตั้ง API key เฉพาะ API service และคง quota; `GEMINI_API_KEY` ไม่ควรอยู่ใน repo หรือ frontend
 
-ลิงก์ Blueprint เริ่มต้นใช้ Render's documented `render.yaml` flow และ route rewrite; ดู [Render Blueprint](https://render.com/docs/blueprint-spec), [monorepo roots](https://render.com/docs/monorepo-support), [external rewrite behavior](https://render.com/docs/redirects-rewrites) และ [Singapore region](https://render.com/docs/regions)
+Render Deploy Button services have auto-deploy disabled so pushes to this public repo do not deploy into every user's Render account. Redeploy from that account's Render Dashboard after reviewing updates. See [Render Deploy Button guidance](https://render.com/docs/deploy-to-render), [Blueprint](https://render.com/docs/blueprint-spec), [monorepo roots](https://render.com/docs/monorepo-support), [external rewrite behavior](https://render.com/docs/redirects-rewrites) and [Singapore region](https://render.com/docs/regions).

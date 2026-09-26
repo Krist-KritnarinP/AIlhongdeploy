@@ -88,4 +88,8 @@ Access token อายุ 15 นาที; refresh สูงสุด 7 วั�
 
 ## Share a staging test link
 
-Render Blueprint setup instructions and its starting link are in [docs/DEPLOY_TEST_LINK.md](docs/DEPLOY_TEST_LINK.md). The frontend URL will be `https://ailhongdeploy-kritnarinp-test-web.onrender.com` once Render successfully creates and deploys it. The page is not live yet: connect GitHub to Render, configure a separate staging database/runtime URL, run both migrations and wait for service health checks before sending that URL to testers.
+Use the button to create the Render services in your own Render account. Review the two services and configure the separate staging database before approving deployment:
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Krist-KritnarinP/AIlhongdeploy)
+
+The frontend URL will be `https://ailhongdeploy-kritnarinp-test-web.onrender.com` once Render successfully creates and deploys it. It currently returns Not Found because the services have not been created yet. Follow [the staging setup steps](docs/DEPLOY_TEST_LINK.md); do not put production database credentials or secrets in GitHub.
