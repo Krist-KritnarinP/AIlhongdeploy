@@ -67,3 +67,9 @@
 - Confirmed proposed app URL currently responds HTTP 404 because the Render services do not exist yet; it is not a live test site. Added the official Deploy to Render button to README to start the Blueprint in the user's Render account.
 - Changed both Blueprint services to `autoDeployTrigger: off` following Render's Deploy Button guidance, so future pushes do not silently deploy into every tester's Render instance. Each owner redeploys from their own Render Dashboard.
 - No Render service or database was created/modified. Still requires user's Render authorization and a separate migrated staging DB runtime URL; never use the production/Supabase credential.
+
+## Vercel GitHub Actions deployment (2026-09-26)
+
+- Added `.github/workflows/deploy.yml`: on every push to `main`, installs frontend dependencies, pulls Vercel production settings, builds with Vercel CLI and deploys the prebuilt frontend to Production. Job permissions are read-only for repo contents and deploys are serialized/cancelled per branch.
+- Added [docs/VERCEL_DEPLOY.md](docs/VERCEL_DEPLOY.md) with instructions to create/link the Vercel frontend project, set `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID` in GitHub Actions Secrets, configure `VITE_API_URL`, and inspect the Action's deployment URL. Updated root README.
+- The workflow publishes frontend only; it does not provision API/database. A same-site API arrangement and actual staging environment remain prerequisites for working refresh-session authentication. No Vercel credentials were supplied or added to the repo.

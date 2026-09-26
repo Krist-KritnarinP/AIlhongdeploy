@@ -93,3 +93,7 @@ Use the button to create the Render services in your own Render account. Review 
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Krist-KritnarinP/AIlhongdeploy)
 
 The frontend URL will be `https://ailhongdeploy-kritnarinp-test-web.onrender.com` once Render successfully creates and deploys it. It currently returns Not Found because the services have not been created yet. Follow [the staging setup steps](docs/DEPLOY_TEST_LINK.md); do not put production database credentials or secrets in GitHub.
+
+## Automatic Vercel deployment
+
+The GitHub Actions workflow in `.github/workflows/deploy.yml` builds and deploys the **frontend** to Vercel Production on each push to `main`. Configure the required GitHub Secrets and Vercel project using [the Vercel deployment guide](docs/VERCEL_DEPLOY.md). The API/database are separate; the frontend needs a public `VITE_API_URL` pointing to the deployed API.
