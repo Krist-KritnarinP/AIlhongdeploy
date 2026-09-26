@@ -1,5 +1,14 @@
 # Handover — 2026-09-26
 
+## อัปเดตเอกสาร: แผน Admin — 2026-09-26
+
+- เพิ่ม [ADMIN_PLAN.md](ADMIN_PLAN.md) บันทึกความจำเป็น หน้าที่ ขอบเขตสิทธิ์ และแผนพัฒนา Admin รุ่นแรก
+- เน้นการระงับบัญชี ดูการใช้/จัดการโควตา AI ปิด AI ชั่วคราว และ audit log
+- ยังไม่ได้เพิ่ม role, schema, API หรือหน้าจอ Admin; เป็นงานเอกสารเท่านั้น
+- ตรวจความสอดคล้องกับ schema/auth/AI quota ปัจจุบัน ลิงก์เอกสาร และ `git diff --check`; ไม่รัน application tests ซ้ำสำหรับการเพิ่มเอกสาร
+
+## สถานะการส่งมอบโค้ดก่อนหน้า
+
 โปรเจกต์รวมเป็น monorepo พร้อม frontend/backend แยกโฟลเดอร์ ดู [README.md](README.md) สำหรับ setup และ deploy
 
 เอกสารงานฉบับเต็มอยู่ที่ [frontend/HANDOVER.md](frontend/HANDOVER.md) และ [frontend/SECURITY_REVIEW.md](frontend/SECURITY_REVIEW.md) โดยหัวข้อท้ายสุดคือผลตรวจรอบล่าสุด ข้อความรุ่นเก่าถูกเก็บไว้เป็นประวัติ

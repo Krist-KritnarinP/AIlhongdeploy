@@ -73,4 +73,4 @@ npm run test:security:integration --prefix backend
 
 Token ยังเก็บใน localStorage; ยังไม่มี email verification/password recovery/breached-password blocklist. IP limiter ใช้ memory ต่อ process; multi-instance ควรใช้ shared store. AI quota เก็บใน database แล้ว. งานนี้ไม่ได้เปิด hosting จริงหรือรับรอง production infrastructure
 
-อ่านต่อ: [Security review](frontend/SECURITY_REVIEW.md) · [Detailed handover](frontend/HANDOVER.md)
+อ่านต่อ: [Security review](frontend/SECURITY_REVIEW.md) · [Detailed handover](frontend/HANDOVER.md) · [แผนบทบาท Admin](ADMIN_PLAN.md)
