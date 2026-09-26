@@ -1,0 +1,14 @@
+node_modules
+# Keep environment variables and backups out of version control
+.env
+.env*.bak
+*.bak
+
+/generated/prisma
+
+# OS / logs
+.DS_Store
+*.log
+
+.env*
+!.env.example

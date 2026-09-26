@@ -1,0 +1,13 @@
+node_modules/
+dist/
+.env*
+!.env.example
+*.bak
+*.log
+.DS_Store
+playwright-report/
+test-results/
+.claude/
+.agents/
+.codex/
+.windsurf/
