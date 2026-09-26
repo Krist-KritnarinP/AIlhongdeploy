@@ -2,6 +2,19 @@
 
 These features are implemented but stay unavailable until their credentials and database migration are configured. Never commit real OAuth or SMTP secrets.
 
+## Checklist to enable Google login
+
+- [ ] In Google Cloud Console, create/select a project and configure the OAuth consent screen for **External** access. While the app is in Testing, add each tester's Google account under Test users; publish the consent screen when ready for broader use.
+- [ ] Create an OAuth Client ID of type **Web application**. Add the exact frontend origins under Authorized JavaScript origins (for example, the Vercel production URL and `http://localhost:5173` for local testing). No wildcard and no URL path.
+- [ ] Copy the Web Client ID (ends with `.apps.googleusercontent.com`) into Vercel's `VITE_GOOGLE_CLIENT_ID` environment variable for the environments you deploy, then redeploy/rebuild the frontend.
+- [ ] Set the same value as `GOOGLE_CLIENT_ID` in the Render API service environment and redeploy the backend.
+- [ ] Verify backend `FRONTEND_URL` is the exact deployed frontend origin, with no trailing slash; it must match the origin allowed by CORS/session checks.
+- [ ] Back up the target database, then run the auth migration once with the migration/owner database credential: `npm run migrate:auth --prefix backend`. Never use the runtime URL if it lacks DDL privileges.
+- [ ] Test a new Google account, an existing account with the same verified email, logout, then login again. Confirm a Google login failure is not leaving a partial session.
+- [ ] If the Google consent screen remains in Testing, make sure every friend/customer tester is listed as a test user. Do not share client secrets or database credentials.
+
+The Google Client ID is a public identifier used in browser code; the OAuth **Client Secret** is not needed for this GIS ID-token flow and must not be put in frontend settings or chat.
+
 ## Apply the database migration
 
 Back up the target database first. With the migration/owner database URL configured as `DIRECT_URL` (or `DATABASE_URL`), run from the repository root:
@@ -41,4 +54,3 @@ Reset links are single-use, expire after 30 minutes, and the database stores onl
 ## Local development
 
 Copy the relevant `.env.example` values into ignored local env files. Add `http://localhost:5173` as an authorized Google JavaScript origin. For password-reset testing, use a real SMTP sandbox/test account; do not use production credentials or a production database.
-

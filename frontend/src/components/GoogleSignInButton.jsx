@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 
 const GOOGLE_SCRIPT = 'https://accounts.google.com/gsi/client';
 
-function GoogleSignInButton({ onCredential, disabled = false, locale = 'en' }) {
+function GoogleSignInButton({ onCredential, onUnavailable, disabled = false, locale = 'en', label = 'Login with Google' }) {
   const mountRef = useRef(null);
   const callbackRef = useRef(onCredential);
   callbackRef.current = onCredential;
@@ -26,7 +26,7 @@ function GoogleSignInButton({ onCredential, disabled = false, locale = 'en' }) {
         theme: 'outline',
         size: 'large',
         shape: 'rectangular',
-        text: 'continue_with',
+        text: 'signin_with',
         logo_alignment: 'left',
         width: Math.min(360, mountRef.current.clientWidth || 320),
         locale,
@@ -51,11 +51,27 @@ function GoogleSignInButton({ onCredential, disabled = false, locale = 'en' }) {
   }, [clientId, locale]);
 
   if (!clientId) {
-    return <button type="button" className="btn btn-outline w-full" disabled title="Set VITE_GOOGLE_CLIENT_ID to enable Google sign-in">Continue with Google</button>;
+    return (
+      <button
+        type="button"
+        className="btn w-full border-[#e5e5e5] bg-white text-black hover:bg-slate-50"
+        onClick={onUnavailable}
+        disabled={disabled}
+      >
+        <svg aria-label="Google logo" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img">
+          <path d="M0 0h512v512H0z" fill="#fff" />
+          <path fill="#34a853" d="M153 292c30 82 118 95 171 60h62v48A192 192 0 0 1 90 341" />
+          <path fill="#4285f4" d="M386 400a140 175 0 0 0 53-179H260v74h102q-7 37-38 57" />
+          <path fill="#fbbc02" d="M90 341a208 200 0 0 1 0-171l63 49q-12 37 0 73" />
+          <path fill="#ea4335" d="M153 219c22-69 116-109 179-50l55-54c-78-75-230-72-297 55" />
+        </svg>
+        {label}
+      </button>
+    );
   }
 
   return (
-    <div className={`btn btn-outline h-12 min-h-12 w-full overflow-hidden p-0 ${disabled ? 'pointer-events-none opacity-60' : ''}`} aria-label="Continue with Google">
+    <div className={`flex h-12 min-h-12 w-full items-center justify-center overflow-hidden rounded-lg border border-[#e5e5e5] bg-white ${disabled ? 'pointer-events-none opacity-60' : ''}`} aria-label={label}>
       <div ref={mountRef} className="flex h-full w-full items-center justify-center" />
     </div>
   );

@@ -14,6 +14,13 @@
 - ตรวจแล้ว: backend tests 15 ผ่าน, frontend tests 6 ผ่าน, Vite production build, Prisma generate/validate และ `git diff --check` ผ่าน; lint ผ่านแต่ยังมี warnings เดิม 8 รายการ
 - ยังไม่ได้ทดสอบส่งเมล/Google OAuth กับ credentials จริง, migration กับ staging DB หรือ live sign-in; ต้องตั้ง env และทำตาม [docs/AUTH_SETUP.md](docs/AUTH_SETUP.md) ก่อนเปิดใช้
 
+## Google button visibility follow-up (2026-09-26)
+
+- ปุ่ม Google เดิมถูก render เป็น disabled เมื่อไม่มี `VITE_GOOGLE_CLIENT_ID` ทำให้กดไม่ได้และผู้ใช้เข้าใจว่าไม่มีปุ่ม; เปลี่ยน fallback ให้แสดงปุ่มสีขาวพร้อมโลโก้ Google ตาม UI ที่ขอ และแจ้งเหตุผลเมื่อกดแต่ยังไม่ได้ตั้งค่า
+- เมื่อ client ID ถูกตั้งแล้ว GIS จะ render ปุ่ม Sign in with Google จริง; backend/OAuth ยังต้องมี client ID คู่กันและโดเมนที่อนุญาตตาม `docs/AUTH_SETUP.md`
+- ยังไม่สามารถเปิดใช้ Google login จริงโดยไม่มี Google OAuth Web Client ID และ authorized origin ของเว็บ
+- เพิ่ม checklist สำหรับผู้ดูแลใน [docs/AUTH_SETUP.md](docs/AUTH_SETUP.md); frontend build และ tests ผ่านหลังปรับปุ่ม
+
 ## Phase 0 — implementation update (2026-09-26)
 
 ทำงานใน worktree/branch `codex/phase0-production` เพื่อไม่ทับงาน agent อื่น ผู้ใช้ยืนยันภายหลังว่ายังไม่มี agent อื่นรับส่วนงาน รายละเอียดการเปิดใช้งานอยู่ใน [docs/PHASE0_OPERATIONS.md](docs/PHASE0_OPERATIONS.md) และสถานะรายข้ออยู่ใน [frontend/ROADMAP.md](frontend/ROADMAP.md)

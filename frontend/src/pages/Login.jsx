@@ -46,6 +46,10 @@ function Login() {
     }
   };
 
+  const handleGoogleUnavailable = () => {
+    toast.error(t("auth.googleNeedsConfig"));
+  };
+
   return (
     <>
       <div className="min-h-screen px-4 pt-10 md:pt-20 pb-20 md:pb-28 flex items-center justify-center">
@@ -118,7 +122,7 @@ function Login() {
                       {t("auth.login")}
                     </button>
                     <div className="divider my-0"></div>
-                    <GoogleSignInButton onCredential={handleGoogleCredential} locale={lang} />
+                    <GoogleSignInButton onCredential={handleGoogleCredential} onUnavailable={handleGoogleUnavailable} locale={lang} label={t("auth.googleBtn")} />
                     <div className="divider my-0">{t("auth.or")}</div>
 
                     <button
