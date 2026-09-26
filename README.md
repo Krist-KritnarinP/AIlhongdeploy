@@ -84,3 +84,8 @@ Token ยังเก็บใน localStorage; ยังไม่มี email v
 Access token อายุ 15 นาที; refresh สูงสุด 7 วันและถูกเพิกถอนเมื่อเปลี่ยนรหัสผ่าน/logout. ตรวจ SameSite/Origin กับโดเมนจริงตาม [Phase 0 operations](docs/PHASE0_OPERATIONS.md)
 
 ผู้ใช้ขอพักส่วนข้อมูลผู้ให้บริการ/กฎหมาย/โดเมน/monitoring จริงไว้ก่อน รายการเหล่านี้และ backup restore/budget alerts ยังไม่เสร็จ ดู [ROADMAP](frontend/ROADMAP.md) สำหรับสถานะล่าสุด ไม่ถือว่า Phase 0 ผ่านเกณฑ์เปิด public ทั้งหมด
+
+
+## Share a staging test link
+
+Render Blueprint setup instructions and its starting link are in [docs/DEPLOY_TEST_LINK.md](docs/DEPLOY_TEST_LINK.md). The frontend URL will be `https://ailhongdeploy-kritnarinp-test-web.onrender.com` once Render successfully creates and deploys it. The page is not live yet: connect GitHub to Render, configure a separate staging database/runtime URL, run both migrations and wait for service health checks before sending that URL to testers.

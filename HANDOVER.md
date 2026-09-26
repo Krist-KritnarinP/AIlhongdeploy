@@ -52,3 +52,12 @@
 ต้นฉบับทั้งสอง repository ยังอยู่ครบพร้อมประวัติ Git. Repo นี้เริ่มประวัติใหม่จาก snapshot ของโค้ดที่แก้แล้ว
 
 ตรวจ fresh install จาก lockfile ใน monorepo แล้ว: unit tests ทั้ง 11 ผ่านโดยไม่ต้องใช้ secret จริง, build และ Prisma schema validate ผ่าน. Dependency installation ในเครื่องตรวจใช้ npm ci --offline --ignore-scripts จาก cache; hosting ควรใช้ npm ci ตาม README
+
+
+## Render staging setup prepared (2026-09-26)
+
+- Added root `render.yaml`: free Singapore API/static services, API readiness, deploy only after GitHub checks pass, API reverse proxy under frontend `/api` (same-origin refresh cookies), SPA fallback, CSP/security headers, random JWT secret, Gemini disabled by default.
+- Added [docs/DEPLOY_TEST_LINK.md](docs/DEPLOY_TEST_LINK.md) with secure setup order and Render Blueprint link; proposed frontend URL `https://ailhongdeploy-kritnarinp-test-web.onrender.com` is **not live/verified** until Blueprint creation, staging runtime DB config, migrations and healthy deployments complete.
+- `origin/main` was checked successfully at `6593b53`, three commits behind local `b504749`; external DNS push attempt was not completed. This turn therefore must push the commits and verify remote SHA before the Render Blueprint can read `render.yaml`.
+- No database or Gemini secrets were found in Render/GitHub; staging requires a separate limited-role database URL entered directly in Render Dashboard, not sent in chat. Gemini begins disabled.
+- Existing production/Supabase database was not touched. Render services not created; waiting for GitHub push/Blueprint sync and user-owned Render environment inputs is still required.
