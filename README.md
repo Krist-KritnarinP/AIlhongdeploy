@@ -43,11 +43,12 @@ Frontend: http://localhost:5173 — API: http://localhost:8899/api
 npx prisma db push
 npm run migrate:security
 npm run migrate:phase0
+npm run migrate:auth
 npx prisma generate
 npm run security:runtime-role
 ```
 
-สำหรับ **ฐานข้อมูลเดิมที่ยังไม่ได้อัปเกรด** สำรองข้อมูลและตรวจ schema ก่อน แล้วรัน `npm run migrate:security`, `npm run migrate:phase0` และ `npx prisma generate` ห้ามใช้ `db push` แทน migration โดยไม่ตรวจผลกระทบ
+สำหรับ **ฐานข้อมูลเดิมที่ยังไม่ได้อัปเกรด** สำรองข้อมูลและตรวจ schema ก่อน แล้วรัน `npm run migrate:security`, `npm run migrate:phase0`, `npm run migrate:auth` และ `npx prisma generate` ห้ามใช้ `db push` แทน migration โดยไม่ตรวจผลกระทบ
 
 `security:runtime-role` เป็นงานผู้ดูแลแบบรันครั้งเดียว: สร้าง role `ailhoung_runtime`, ตรวจสิทธิ์, เขียน DATABASE_URL และ JWT_SECRET ใหม่ลง `.env` โดยไม่พิมพ์ secret; เก็บ DIRECT_URL เฉพาะเครื่องผู้ดูแล/migration job ไม่ต้องใส่ใน runtime hosting. สคริปต์จะปฏิเสธถ้า role มีอยู่แล้ว
 
@@ -80,6 +81,8 @@ Token ยังเก็บใน localStorage; ยังไม่มี email v
 ## Phase 0 update
 
 เพิ่ม CI, health checks, optional Sentry reporting, controlled Gemini fallback, rotating HttpOnly refresh sessions และ self-service export/delete account แล้ว ต้องรัน `npm run migrate:phase0 --prefix backend` ด้วย migration credential **ก่อน** deploy API รุ่นนี้
+
+Google sign-in และ forgot/reset password: ดู [docs/AUTH_SETUP.md](docs/AUTH_SETUP.md) สำหรับ DB migration, Google OAuth client ID และ SMTP environment variables ที่ต้องตั้งก่อนเปิดใช้งาน
 
 Access token อายุ 15 นาที; refresh สูงสุด 7 วันและถูกเพิกถอนเมื่อเปลี่ยนรหัสผ่าน/logout. ตรวจ SameSite/Origin กับโดเมนจริงตาม [Phase 0 operations](docs/PHASE0_OPERATIONS.md)
 

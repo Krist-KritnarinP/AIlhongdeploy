@@ -123,6 +123,7 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
 exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
   tokenVersion: 'tokenVersion',
+  googleSub: 'googleSub',
   username: 'username',
   email: 'email',
   password: 'password',
@@ -194,6 +195,14 @@ exports.Prisma.RefreshSessionScalarFieldEnum = {
   usedAt: 'usedAt'
 };
 
+exports.Prisma.PasswordResetTokenScalarFieldEnum = {
+  tokenHash: 'tokenHash',
+  userId: 'userId',
+  expiresAt: 'expiresAt',
+  usedAt: 'usedAt',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -228,7 +237,8 @@ exports.Prisma.ModelName = {
   Activity: 'Activity',
   AiMessage: 'AiMessage',
   AiUsage: 'AiUsage',
-  RefreshSession: 'RefreshSession'
+  RefreshSession: 'RefreshSession',
+  PasswordResetToken: 'PasswordResetToken'
 };
 
 /**

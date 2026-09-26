@@ -44,5 +44,5 @@ jobs:
       - run: npm test
       - run: npm run build
       - run: npm run test:security:integration --prefix backend
-      - run: npm run migrate:security --prefix backend && npm run migrate:phase0 --prefix backend && npm run migrate:phase0 --prefix backend
+      - run: npm run migrate:security --prefix backend && npm run migrate:phase0 --prefix backend && npm run migrate:phase0 --prefix backend && npm run migrate:auth --prefix backend && npm run migrate:auth --prefix backend
       - run: npm run test:phase0:integration --prefix backend

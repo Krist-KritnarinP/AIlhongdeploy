@@ -1,5 +1,19 @@
 # Handover — 2026-09-26
 
+## Google sign-in + password recovery (2026-09-26)
+
+- เพิ่ม login ด้วย Google Identity Services, ยืนยัน ID token ฝั่ง backend ด้วย Google Auth Library และผูกบัญชีเดิมเมื่อ Google ยืนยัน email แล้ว
+- เพิ่ม forgot/reset password: ลิงก์ใช้ครั้งเดียว หมดอายุ 30 นาที เก็บเฉพาะ token hash, เปลี่ยนรหัสแล้ว revoke refresh sessions ทุกอุปกรณ์; reset/Google endpoints มี rate limit แยก
+- เพิ่ม migration แบบ additive/idempotent `npm run migrate:auth --prefix backend`; CI ทดสอบ migration ซ้ำ
+- เพิ่มหน้า Forgot/Reset ด้วย DaisyUI, ปุ่ม Continue with Google, คำแปลไทย/อังกฤษ/จีน/เกาหลี และ CSP ที่อนุญาตเฉพาะ Google Identity Services ที่ต้องใช้
+- เพิ่ม [คู่มือตั้งค่า OAuth/SMTP](docs/AUTH_SETUP.md), env examples และการตั้งค่า; ไม่มีการเพิ่ม secret จริง
+- Google sign-in และ email reset ยังปิดอยู่จนกว่าจะตั้ง `VITE_GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_ID`, SMTP ทั้ง 5 ค่า และ apply migration กับฐานข้อมูลเป้าหมาย
+- บัญชีที่สมัครผ่าน Google สามารถใช้ forgot-password ตั้งรหัสผ่านภายหลังเพื่อรองรับการยืนยันรหัสผ่านในหน้า account settings
+- รอบนี้ไม่ deploy และไม่แตะฐานข้อมูลจริง; ต้องรัน `npm run migrate:auth` ด้วย migration credential ในแต่ละ environment หลัง backup ก่อน deploy backend
+- เพิ่ม packages `google-auth-library` และ `nodemailer` (stable latest ณ ตอนติดตั้ง)
+- ตรวจแล้ว: backend tests 15 ผ่าน, frontend tests 6 ผ่าน, Vite production build, Prisma generate/validate และ `git diff --check` ผ่าน; lint ผ่านแต่ยังมี warnings เดิม 8 รายการ
+- ยังไม่ได้ทดสอบส่งเมล/Google OAuth กับ credentials จริง, migration กับ staging DB หรือ live sign-in; ต้องตั้ง env และทำตาม [docs/AUTH_SETUP.md](docs/AUTH_SETUP.md) ก่อนเปิดใช้
+
 ## Phase 0 — implementation update (2026-09-26)
 
 ทำงานใน worktree/branch `codex/phase0-production` เพื่อไม่ทับงาน agent อื่น ผู้ใช้ยืนยันภายหลังว่ายังไม่มี agent อื่นรับส่วนงาน รายละเอียดการเปิดใช้งานอยู่ใน [docs/PHASE0_OPERATIONS.md](docs/PHASE0_OPERATIONS.md) และสถานะรายข้ออยู่ใน [frontend/ROADMAP.md](frontend/ROADMAP.md)

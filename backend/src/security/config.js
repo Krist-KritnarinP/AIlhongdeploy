@@ -19,4 +19,12 @@ export function validateConfig(env = process.env) {
     if (env.AI_ENABLED !== 'false' && (!env.GEMINI_MODEL || /latest|preview|experimental/i.test(env.GEMINI_MODEL))) throw new Error('Set an explicit stable GEMINI_MODEL or disable AI');
     if (env.GEMINI_FALLBACK_MODEL && /latest|preview|experimental/i.test(env.GEMINI_FALLBACK_MODEL)) throw new Error('Fallback model must be explicitly pinned');
   }
+  const mailKeys = ['SMTP_HOST', 'SMTP_PORT', 'SMTP_USER', 'SMTP_PASS', 'SMTP_FROM'];
+  const configuredMailKeys = mailKeys.filter(key => env[key]);
+  if (configuredMailKeys.length && configuredMailKeys.length !== mailKeys.length) {
+    throw new Error('Configure all SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, and SMTP_FROM values together');
+  }
+  if (env.SMTP_PORT && (!Number.isInteger(Number(env.SMTP_PORT)) || Number(env.SMTP_PORT) < 1 || Number(env.SMTP_PORT) > 65535)) {
+    throw new Error('Invalid SMTP_PORT');
+  }
 }

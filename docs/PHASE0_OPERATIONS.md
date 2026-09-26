@@ -36,12 +36,13 @@
    npm ci
    npm run migrate:security
    npm run migrate:phase0
+   npm run migrate:auth
    npx prisma generate
    npx prisma validate
    ```
 
-3. Migration Phase 0 เพิ่มตาราง `refresh_sessions` และ indexes เปิด RLS และเพิ่มสิทธิ์ให้ `ailhoung_runtime` หากมี role อยู่แล้ว เป็น additive/idempotent; ไม่ลบผู้ใช้หรือข้อมูลทริป
-4. Database ใหม่ที่ว่างเท่านั้น: `npx prisma db push` ก่อน migrations; สร้าง runtime role ด้วย `npm run security:runtime-role` หลัง migrations ครบแล้ว ห้ามใช้ db push กับฐานข้อมูล production เดิมแบบไม่ตรวจ
+3. Migration Phase 0 เพิ่มตาราง `refresh_sessions`; Auth migration เพิ่ม `google_sub` และ `password_reset_tokens`; ทั้งคู่เป็น additive/idempotent ไม่ลบผู้ใช้หรือข้อมูลทริป และจะเพิ่ม grants/policy ให้ `ailhoung_runtime` ที่มีอยู่แล้ว
+4. Database ใหม่ที่ว่างเท่านั้น: `npx prisma db push` ก่อน migrations; สร้าง runtime role ด้วย `npm run security:runtime-role` หลัง migrations ทั้งหมดครบแล้ว ห้ามใช้ db push กับฐานข้อมูล production เดิมแบบไม่ตรวจ
 5. Deploy backend ก่อน frontend ตรวจ `/health/live` และ `/health/ready`; ทดสอบ login, refresh, logout, เปลี่ยนรหัส, ส่งออกข้อมูล และลบบัญชีทดสอบ
 6. ตั้ง cron ภายในระบบที่เชื่อถือได้รัน `npm run maintenance:sessions` ทุกวันด้วย runtime role เพื่อเก็บกวาด refresh session ที่หมดอายุ ไม่ต้องเปิด cleanup endpoint สาธารณะ
 7. ถ้า rollback โค้ด เก็บตาราง additive ไว้ ไม่ drop ตารางระหว่าง incident; เวอร์ชันก่อนหน้าไม่อ่าน refresh sessions ผู้ใช้ที่มี access token หมดอายุต้อง login ใหม่

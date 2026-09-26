@@ -8,10 +8,13 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useLang } from "@/i18n";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import GoogleSignInButton from "@/components/GoogleSignInButton";
+import { Link } from "react-router-dom";
 
 function Login() {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const login = useUserStore((state) => state.login);
+  const loginWithGoogle = useUserStore((state) => state.loginWithGoogle);
   const { formState, register, handleSubmit } = useForm({
     resolver: zodResolver(loginSchema),
     mode: "onSubmit",
@@ -30,6 +33,16 @@ function Login() {
       navigate("/dashboard");
     } catch (err) {
       toast.error(err?.response?.data?.message || t("auth.loginFail"));
+    }
+  };
+
+  const handleGoogleCredential = async credential => {
+    try {
+      await loginWithGoogle(credential);
+      toast.success(t("auth.loginOk"));
+      navigate("/dashboard");
+    } catch (err) {
+      toast.error(err?.response?.data?.message || t("auth.googleLoginFail"));
     }
   };
 
@@ -96,12 +109,17 @@ function Login() {
                       <p className="text-sm text-error mt-1">
                         {errors.password?.message}
                       </p>
+                      <Link className="link link-primary mt-2 inline-block text-sm" to="/forgot-password">
+                        {t("auth.forgotPassword")}
+                      </Link>
                     </div>
 
                     <button className="btn btn-primary text-lg w-full">
                       {t("auth.login")}
                     </button>
                     <div className="divider my-0"></div>
+                    <GoogleSignInButton onCredential={handleGoogleCredential} locale={lang} />
+                    <div className="divider my-0">{t("auth.or")}</div>
 
                     <button
                       className="btn btn-secondary text-base sm:text-lg text-white w-full"

@@ -14,6 +14,11 @@ const useUserStore = create( persist((set,get) => ({
    set({token : resp.data.token, user: resp.data.user})
    return resp
  },
+ loginWithGoogle: async (credential)=>{
+   const resp = await mainApi.post('/auth/google',{ credential })
+   set({token: resp.data.token, user: resp.data.user})
+   return resp
+ },
  register: async (data)=>{
    const resp = await apiRegister(data)
    return resp
